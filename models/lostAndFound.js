@@ -1,0 +1,44 @@
+const mongoose = require("mongoose");
+
+
+// creation of lostAndFound 
+
+const lostAndFoundSchema = new mongoose.Schema({
+
+    user:{
+        type:mongoose.Schema.ObjectId,
+        required:true,
+        ref:"User"
+    },
+    title:{
+        type:String,
+    },
+    description:{
+        type:String,
+    },
+    Image:{
+        type:String,
+    },
+    date:{
+        type:Date,
+    },
+    locationDetails:{
+        type:String,
+    },
+    time:{
+        type:String,
+    },
+    category:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"Category",
+    },
+    reviews:[
+        {
+            type:mongoose.Schema.Types.ObjectId,
+            ref: "Reviews"
+        }
+    ],
+
+}, { timestamps: true })
+
+module.exports = mongoose.model("lostAndFound", lostAndFoundSchema);
