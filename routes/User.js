@@ -9,14 +9,21 @@ const {
     login
 } = require("../controllers/Auth");
 
+
+const {resetPasswordToken, resetPassword} = require("../controllers/ResetPassword")
+
 const { auth } = require("../middlewares/auth")
 
-
+// -------------------- AUTHENTICATIONS ------------------------------
 
 router.post("/sendotp", sendotp);
 router.post("/signup", signup);
 router.post("/login", login);
 // router.post("/changepassword", auth, changePassword)
+
+// --------------------- RESET PASSWORD ------------------------------
+router.post("/reset-password-token", resetPasswordToken);
+router.post("/reset-password", resetPassword);
 
 
 
