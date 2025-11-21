@@ -22,7 +22,10 @@ const lostAndFoundSchema = new mongoose.Schema({
     date:{
         type:Date,
     },
-    locationDetails:{
+    Area:{
+        type:String,
+    },
+    spot:{
         type:String,
     },
     time:{
