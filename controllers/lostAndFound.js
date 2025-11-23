@@ -119,6 +119,148 @@ exports.uploadData = async(req, res) => {
 
 }
 
+// Edit Lost and Found Data
+
+exports.editLostData = async(req, res) => {
+
+    try{
+        const {lostDataId} = req.body;
+        const {
+            title, description, date, time, Area, spot, category
+        } = req.body;
+
+        const existLostData = await lostAndFound.findById(lostDataId);
+
+        console.log("existing data...", existLostData)
+        if(!existLostData) {
+            return res.status(404).json({
+                success:false,
+                message:"Lost Data Not Found"
+            })
+        }
+        const categoryDetails = await Category.findOne({name:category});
+
+        console.log("Category Details...", categoryDetails)
+        // check category related data
+
+        if(!categoryDetails) {
+            return res.status(404).json({
+                success:false,
+                message:`Category Not Found`
+            })
+        }
+
+        let updateImage = existLostData.Image
+        // check file is upload or not
+
+        if(req.files && req.files.itemImage) {
+            const updatedImage = req.files.itemImage;
+            const itemImage = await uploadImageToCloudinary(
+                updatedImage,
+                process.env.FOLDER_NAME
+            )
+            updateImage = itemImage.secure_url;
+        }
+        // Updation logic
+
+        const updatedLostData = await lostAndFound.findByIdAndUpdate(
+            lostDataId,
+            {
+                title:title || existLostData.title,
+                description:description || existLostData.description,
+                date:date || existLostData.date,
+                time:time || existLostData.time,
+                Area:Area || existLostData.Area,
+                spot:spot || existLostData.spot,
+                Image:updateImage || existLostData.Image,
+                category : existLostData.category
+            },
+
+            {new:true}
+        )
+
+        if(category && category !== existLostData.category.toString()) {
+
+            await Category.findByIdAndUpdate(
+                existLostData.category,
+                {$pull:{lostAndFound:lostDataId}}
+            )
+        }
+
+        // add new Category
+
+        await Category.findByIdAndUpdate(
+            categoryDetails._id,
+            {$push:{lostAndFound:lostDataId}}
+        )
+
+
+        // send updated response 
+
+        return res.status(200).json({
+            success:true,
+            message:`Lost Item Updated Sucessfully`,
+            data:updatedLostData
+        })
+
+
+    }
+    catch(error) {
+        console.log(error);
+        return res.status(500).json({
+            success:false,
+            message:`Internet server error in editLostData`
+        })
+    }
+
+}
+
+// Show Category Wise Data
+
+exports.showCategoryWiseData = async(req, res) => {
+
+    try{
+        
+
+        // const categoryWiseData = await Category.find({})
+        // .populate("Category").populate("lostAndFound")
+
+        // const showCategoryWiseData = lostAndFound.find({})
+        // .populate("category")
+
+        // desctruct the category data
+
+        const {category} = req.body;
+
+        const categoryWiseData = await Category.findOne({name:category})
+        .populate("lostAndFound")
+
+        if(!categoryWiseData) {
+            return res.status(404).json({
+                success:false,
+                message:`Category data not found`
+            })
+        }
+
+
+        // return response 
+
+        return res.status(200).json({
+            success:true,
+            categoryWiseData
+        })
+    }
+
+    catch(error) {
+        console.log(error);
+        return res.status(500).json({
+            success:false,
+            message:`Internet Server Error in Show Category Wise Details`
+        })
+    }
+
+}
+
 // Show all Category Data
 
 exports.getAllLostData = async(req, res) => {
@@ -150,4 +292,56 @@ exports.getAllLostData = async(req, res) => {
             error:error.message
         })
     }
+}
+
+
+// Delete Lost Data
+
+exports.deleteLostData = async(req, res) => {
+
+    try{
+
+        const {lostDataId} = req.body;
+
+        const lostAndFoundData = await lostAndFound.findById(lostDataId);
+
+        if(!lostAndFoundData) {
+            return res.status(404).json({
+                success:false,
+                message:`Lost Data Not Found`
+            })
+        }
+        const userId = lostAndFoundData.user
+        const categoryId = lostAndFoundData.category
+
+        await User.findByIdAndUpdate(
+            userId,
+            {$pull:{lostAndFound:lostDataId}}
+        )
+
+        await Category.findByIdAndUpdate(
+            categoryId,
+            {$pull:{lostAndFound:lostDataId}}
+        )
+
+        // delete lost data
+        await lostAndFound.findByIdAndDelete(lostDataId)
+
+
+        return res.status(200).json({
+            success:true,
+            message:`Data Delete Successfully`
+        })
+        
+
+    }
+    catch(error) {
+        console.log(error);
+        return res.status(500).json({
+            success:false,
+            message:`Internet Server Error`
+        })
+    }
+
+
 }
