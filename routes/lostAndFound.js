@@ -6,7 +6,7 @@ const {createCategory, getAllCategory, categoryPageDetail
 } = require("../controllers/Category");
 
 const {uploadData, getAllLostData, editLostData,
- showCategoryWiseData, deleteLostData} = require("../controllers/lostAndFound");
+ showCategoryWiseData, deleteLostData, showtagWiseData} = require("../controllers/lostAndFound");
 
 const {auth} = require("../middlewares/auth");
 
@@ -24,7 +24,7 @@ router.put("/editLostData", auth, editLostData)
 router.post("/showCategoryWiseData",auth, showCategoryWiseData)
 router.delete("/deleteLostData", auth, deleteLostData)
 router.get("/getAllLostData", getAllLostData);
-
+router.post("/showtagWiseData", showtagWiseData)
 
 
 module.exports = router

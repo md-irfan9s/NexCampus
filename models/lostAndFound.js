@@ -31,6 +31,10 @@ const lostAndFoundSchema = new mongoose.Schema({
     time:{
         type:String,
     },
+    tag:{
+        type:String,
+        enum:["Lost", "Found"]
+    },
     category:{
         type:mongoose.Schema.Types.ObjectId,
         ref:"Category",

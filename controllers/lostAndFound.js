@@ -19,20 +19,24 @@ exports.uploadData = async(req, res) => {
 
         const {
             title, description, date, time, Area, spot,
-            category
+            category, tag
         } = req.body;
 
         // get image form request files
 
         const Image = req.files.itemImage;
 
-        if(!title || !description || !date || !time || !Area || !spot || !category || !Image) {
+        if(!title || !description || !date || !time || !Area || !spot || !category || !Image
+            || !tag
+
+        ) {
             return res.status(400).json({
                 success:false,
                 message:`All fields are required`
             })
         }
 
+        console.log("Tag is ... ", tag)
         const userDetails = await User.findById(userId);
 
         console.log("User ID....", userDetails);
@@ -72,6 +76,7 @@ exports.uploadData = async(req, res) => {
             time,
             Area,
             spot,
+            tag,
             Image:itemImage.secure_url,
             category:categoryDetails._id,
             user:userId,
@@ -126,7 +131,7 @@ exports.editLostData = async(req, res) => {
     try{
         const {lostDataId} = req.body;
         const {
-            title, description, date, time, Area, spot, category
+            title, description, date, time, Area, spot, category, tag
         } = req.body;
 
         const existLostData = await lostAndFound.findById(lostDataId);
@@ -172,6 +177,7 @@ exports.editLostData = async(req, res) => {
                 time:time || existLostData.time,
                 Area:Area || existLostData.Area,
                 spot:spot || existLostData.spot,
+                tag:tag || existLostData.tag,
                 Image:updateImage || existLostData.Image,
                 category : existLostData.category
             },
@@ -343,5 +349,39 @@ exports.deleteLostData = async(req, res) => {
         })
     }
 
+
+}
+
+// show tag wise data
+
+exports.showtagWiseData = async(req, res) => {
+
+    try{
+        const {tag} = req.body
+
+        if(tag === "Lost") {
+            var TagData = await lostAndFound.find({tag})
+            
+        }
+        else{
+            TagData = await lostAndFound.find({tag})
+            
+        }
+
+        console.log("Tag Data..", TagData)
+        return res.status(200).json({
+            success:true,
+            data:TagData
+
+        })
+    }
+
+    catch(error){
+        console.log(error)
+        return res.status(500).json({
+            success:false,
+            message:`Internet server error`
+        })
+    }
 
 }
