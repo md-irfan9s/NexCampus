@@ -45,6 +45,10 @@ const lostAndFoundSchema = new mongoose.Schema({
             ref: "Reviews"
         }
     ],
+    connectUser: {
+        type:mongoose.Schema.Types.ObjectId,
+        ref : "ConnectUser"
+    }
 
 }, { timestamps: true })
 

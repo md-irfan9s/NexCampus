@@ -7,52 +7,56 @@ const userSchema = new mongoose.Schema(
     {
         // Define naming with required true
         firstName: {
-            type:String,
-            required:true,
-            trim:true
+            type: String,
+            required: true,
+            trim: true
         },
-        lastName:{
-            type:String,
-            required:true,
-            trim:true,
+        lastName: {
+            type: String,
+            required: true,
+            trim: true,
         },
 
-        email:{
-            type:String,
-            required:true,
-            trim:true,
+        email: {
+            type: String,
+            required: true,
+            trim: true,
         },
         password: {
-            type:String,
-            required:true,
+            type: String,
+            required: true,
         },
         accountType: {
-            type:String,
-            enum:["Admin"],
+            type: String,
+            enum: ["Admin"],
             // required:true   // no need to mark as required
         },
         additionalDetails: {
-            type:mongoose.Schema.Types.ObjectId,
-            required:true,
-            ref : "Profile"
+            type: mongoose.Schema.Types.ObjectId,
+            required: true,
+            ref: "Profile"
         },
-        image:{
-            type:String,
+        image: {
+            type: String,
         },
-        token:{
-            type:String,
+        token: {
+            type: String,
         },
         resetPasswordExpires: {
-            type:Date,
+            type: Date,
         },
-        lostAndFound :[
+        lostAndFound: [
             {
                 type: mongoose.Schema.Types.ObjectId,
-                ref : "lostAndFound"
+                ref: "lostAndFound"
             }
-        ]
+        ],
+        connectUser: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "ConnectUser"
+        }
     },
-    {timestamps:true}
+    { timestamps: true }
 
 );
 

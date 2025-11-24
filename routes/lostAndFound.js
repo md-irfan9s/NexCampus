@@ -8,6 +8,8 @@ const {createCategory, getAllCategory, categoryPageDetail
 const {uploadData, getAllLostData, editLostData,
  showCategoryWiseData, deleteLostData, showtagWiseData} = require("../controllers/lostAndFound");
 
+const {sendMessage} = require("../controllers/ConnectUser")
+
 const {auth} = require("../middlewares/auth");
 
 
@@ -25,6 +27,12 @@ router.post("/showCategoryWiseData",auth, showCategoryWiseData)
 router.delete("/deleteLostData", auth, deleteLostData)
 router.get("/getAllLostData", getAllLostData);
 router.post("/showtagWiseData", showtagWiseData)
+
+
+
+// ----------------------Connect With User----------------------------------
+
+router.post("/sendMessage", auth, sendMessage);
 
 
 module.exports = router
