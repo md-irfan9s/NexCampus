@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const connectUserSchema = new mongoose.Schema({
   
-    lostAndFound : {
+    lostId : {
         type:mongoose.Schema.Types.ObjectId,
         ref : "lostAndFound",
         // required:true

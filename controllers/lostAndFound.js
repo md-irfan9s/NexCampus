@@ -2,6 +2,7 @@ const lostAndFound = require("../models/lostAndFound");
 const Category = require("../models/Category")
 const User = require("../models/User");
 const { uploadImageToCloudinary } = require("../utils/imageUploader");
+const {createReview} =  require("../controllers/Reviews") 
 
 // load the enviorment
 
@@ -308,6 +309,8 @@ exports.deleteLostData = async(req, res) => {
     try{
 
         const {lostDataId} = req.body;
+        
+        const {reviewMessage} = req.body
 
         const lostAndFoundData = await lostAndFound.findById(lostDataId);
 
@@ -330,13 +333,19 @@ exports.deleteLostData = async(req, res) => {
             {$pull:{lostAndFound:lostDataId}}
         )
 
+        // open modal 
+
+        const reviewData = await createReview({userId, reviewMessage, lostDataId})
+
+
         // delete lost data
         await lostAndFound.findByIdAndDelete(lostDataId)
 
 
         return res.status(200).json({
             success:true,
-            message:`Data Delete Successfully`
+            message:`Data Delete Successfully`,
+            data:reviewData
         })
         
 

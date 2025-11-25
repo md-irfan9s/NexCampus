@@ -1,6 +1,6 @@
 const ConnectUser = require("../models/ConnectUser");
 const User = require("../models/User");
-// const lostAndFound = require("../models/lostAndFound");
+const lostAndFound = require("../models/lostAndFound");
 
 
 // send message logic
@@ -17,15 +17,16 @@ exports.sendMessage = async(req, res) => {
 
         // fetch data message form request body
 
-        const {messageData} = req.body;
+        const {messageData, lostId} = req.body;
 
         // check user already exists or not
         const existingUser = await User.findById(userId);
 
+
         if(!existingUser) {
             return res.status(404).json({
                 success:false,
-                message:"User Not Found",
+                message:"User Not Found, Please Signup to Continue",
             })
         }
         
@@ -43,7 +44,9 @@ exports.sendMessage = async(req, res) => {
         const saveMessage = await ConnectUser.create({
             messageData,
             user:userId,
+            lostId:lostId
         })
+
 
         // update in user
 
@@ -51,11 +54,6 @@ exports.sendMessage = async(req, res) => {
             userId,
             {$push:{connectUser:messageData._id}}
         )
-
-        // await lostAndFound.findByIdAndUpdate(
-        //     userId,
-        //     {$push:{connectUser:messageData._id}}
-        // )
 
         // return response
 
