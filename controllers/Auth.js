@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt")
 const Profile = require("../models/Profile");
 const lostAndFound = require("../models/lostAndFound");
+const sendEmail = require("../utils/EmailSender")
 
 require("dotenv").config();
 
@@ -51,6 +52,15 @@ exports.sendotp = async (req, res) => {
         const otpPayload = { email, otp }
 
         const otpBody = await OTP.create(otpPayload);
+
+        // Send Email with user
+
+        await sendEmail(
+            email,
+            "Your OTP Code",
+            `<h2>Your OTP is: <b>${otp}</b></h2>
+            <p>This OTP is valid for 5 minutes.</p>`
+        )
 
         res.status(200).json({
             success: true,
