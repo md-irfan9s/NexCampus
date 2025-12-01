@@ -9,7 +9,7 @@ const profileSchema = new mongoose.Schema({
         type: String,
         trim: true
     },
-    Class: {
+    course: {
         type: String,
     },
     rollNo: {
@@ -21,14 +21,41 @@ const profileSchema = new mongoose.Schema({
     college: {
         type: String,
     },
+    registrationNo: {
+        type: String,
+    },
+    ExamRollNo: {
+        type: String,
+    },
+    BoradName:{
+        type:String,
+    },
+    obtained:{
+        type:String,
+    },
+    year:{
+        type:String,
+    },
+    semester: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Semester",
+        }
+    ],
+    socialMediaLinks:[
+        {
+            type:mongoose.Schema.Types.ObjectId,
+            redf:"SocialLinks"
+        }
+    ],
     documentData: [
         {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Document",
         }
     ],
-    Project:{
-        type:mongoose.Schema.Types.ObjectId,
+    Project: {
+        type: mongoose.Schema.Types.ObjectId,
         ref: "Project"
     }
 })

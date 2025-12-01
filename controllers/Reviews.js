@@ -38,8 +38,13 @@ exports.addReviews = async (req, res) => {
         const Review = await Reviews.create({
             reviewMessage,
             user: userId,
-            los
+            
         })
+
+        await Reviews.findByIdAndUpdate(
+            lostDataId,
+            {$pull:{lostAndFound:lostDataId}}
+        )
 
         return res.status(200).json({
             success: true,
