@@ -5,10 +5,10 @@ const profileSchema = new mongoose.Schema({
     gender: {
         type: String
     },
-    about: {
-        type: String,
-        trim: true
-    },
+    // about: {
+    //     type: String,
+    //     trim: true
+    // },
     course: {
         type: String,
     },
@@ -27,15 +27,21 @@ const profileSchema = new mongoose.Schema({
     ExamRollNo: {
         type: String,
     },
-    BoradName:{
-        type:String,
-    },
-    obtained:{
-        type:String,
-    },
-    year:{
-        type:String,
-    },
+    // BoradName:{
+    //     type:String,
+    // },
+    // obtained:{
+    //     type:String,
+    // },
+    // year:{
+    //     type:String,
+    // },
+    qualification:[
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Qualification",
+        }
+    ],
     semester: [
         {
             type: mongoose.Schema.Types.ObjectId,
@@ -54,10 +60,10 @@ const profileSchema = new mongoose.Schema({
             ref: "Document",
         }
     ],
-    Project: {
+    Project: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Project"
-    }
+    }]
 })
 
 // export the profile schema 

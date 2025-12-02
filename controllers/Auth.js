@@ -145,14 +145,17 @@ exports.signup = async (req, res) => {
 
         // Todo: for writing profile section logic
         const profileDetails = await Profile.create({
-            gender: null,
-            about: null,
-            Class: null,
-            rollNo: null,
-            session: null,
-            college: null,
-            documentData: null,
-            Project: null
+            gender:null,
+            course:null,
+            session:null,
+            college:null,
+            registrationNo:null,
+            ExamRollNo:null,
+            qualification:[],
+            semester:[],
+            socialMediaLinks:[],
+            documentData:[],
+            Project:[],
         })
 
         // craete lost and found data as a null 
@@ -187,6 +190,7 @@ exports.signup = async (req, res) => {
     }
 
     catch (error) {
+        console.log(error)
         return res.status(500).json({
             success: false,
             message: "User cannot be registered. Please try again.",
