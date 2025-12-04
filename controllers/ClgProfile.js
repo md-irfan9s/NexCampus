@@ -2,6 +2,8 @@ const Profile = require("../models/Profile");
 const { uploadImageToCloudinary } = require("../utils/imageUploader");
 const User = require("../models/User")
 const Qualification = require("../models/Qualification")
+const PersonalDetails = require("../models/personalDetails");
+const personalDetails = require("../models/personalDetails");
 
 require("dotenv").config()
 
@@ -97,113 +99,164 @@ exports.updateProfessionalDetails = async (req, res) => {
 
 // Qualification details
 
-exports.qualificationDetails = async(req, res) => {
+// exports.qualificationDetails = async(req, res) => {
 
-    try{
-        // Fetch data from req.body
-        const {BoardName = "",
+//     try{
+//         // Fetch data from req.body
+//         const {BoardName = "",
+//             obtained = "",
+//             year = ""} = req.body;
+
+
+//         const id = req.user.id;
+
+        
+//         const userDetails = await User.findById(id);
+//         const profile = await Profile.findById(userDetails.additionalDetails)
+
+//         console.log(profile);
+
+//         console.log(userDetails);
+        
+//         const details = await Qualification.create({
+//             BoardName,
+//             obtained,
+//             year,
+//             additionalDetails:profile._id
+//         })
+
+//         console.log(details);
+
+//         const updatedQualification = await Profile.findByIdAndUpdate(profile._id,
+//             {$push:{qualification:details._id}},
+//             { new: true }            
+//         )
+        
+        
+//         // return response
+
+//         return res.json({
+//             success:true,
+//             message:"Qualification updated successfully",
+//             updatedQualification
+//         })
+//     }
+//     catch(error){
+//         console.log(error)
+//         return res.status(500).json({
+//             success:false,
+//             message:"Something went wront in qualification Details"
+//         })
+//     }
+
+// }
+
+
+exports.qualificationDetails = async (req, res) => {
+    try {
+        const userId = req.user.id;
+
+        const {
+            id,              // <-- If present → Update mode
+            BoardName = "",
             obtained = "",
-            year = ""} = req.body;
+            year = ""
+        } = req.body;
+
+        // Get User + Profile
+        const user = await User.findById(userId);
+        if (!user) return res.status(404).json({ success: false, message: "User not found" });
+
+        const profile = await Profile.findById(user.additionalDetails);
+        if (!profile) return res.status(404).json({ success: false, message: "Profile not found" });
 
 
-        const id = req.user.id;
+        // --------------------------------------------
+        // UPDATE QUALIFICATION (EDIT MODE)
+        // --------------------------------------------
+        if (id) {
+            const updatedQualification = await Qualification.findByIdAndUpdate(
+                id,
+                { BoardName, obtained, year },
+                { new: true }
+            );
 
-        
-        const userDetails = await User.findById(id);
-        const profile = await Profile.findById(userDetails.additionalDetails)
+            return res.json({
+                success: true,
+                message: "Qualification updated successfully",
+                qualification: updatedQualification
+            });
+        }
 
-        console.log(profile);
 
-        console.log(userDetails);
-        
-        const details = await Qualification.create({
+        // --------------------------------------------
+        // CREATE QUALIFICATION (CREATE MODE)
+        // --------------------------------------------
+        const newQualification = await Qualification.create({
             BoardName,
             obtained,
             year,
             additionalDetails:profile._id
-        })
+        });
 
-        console.log(details);
-
-        const updatedQualification = await Profile.findByIdAndUpdate(profile._id,
-            {$push:{qualification:details._id}},
-            { new: true }            
-        )
-        
-        
-        // return response
+        await Profile.findByIdAndUpdate(
+            profile._id,
+            { $push: { qualification: newQualification._id } },
+            { new: true }
+        );
 
         return res.json({
-            success:true,
-            message:"Qualification updated successfully",
-            updatedQualification
-        })
-    }
-    catch(error){
-        console.log(error)
+            success: true,
+            message: "Qualification created successfully",
+            qualification: newQualification
+        });
+
+    } catch (error) {
+        console.log(error);
         return res.status(500).json({
-            success:false,
-            message:"Something went wront in qualification Details"
-        })
+            success: false,
+            message: "Something went wrong",
+            error: error.message
+        });
     }
+};
 
-}
 
-// exports.updateProfessionalDetails = async (req, res) => {
-//     try {
-//         const {
-//             firstName = "",
-//             lastName = "",
-//             registrationNo = "",
-//             ExamRollNo = "",
-//             session = "",
-//             course = "",
-//         } = req.body;
 
-//         const userId = req.user.id;
+exports.updatePersonalDetails = async (req, res) => {
+    try {
+        const userId = req.user.id;
 
-//         // Fetch user
-//         const userDetails = await User.findById(userId);
-//         if (!userDetails) {
-//             return res.status(404).json({ success: false, message: "User not found" });
-//         }
+        const user = await User.findById(userId);
+        if (!user) return res.status(404).json({ success: false, message: "User not found" });
 
-//         // Fetch profile
-//         const profile = await Profile.findById(userDetails.additionalDetails);
-//         if (!profile) {
-//             return res.status(404).json({ success: false, message: "Profile not found" });
-//         }
+        const profileId = user.additionalDetails;
 
-//         // Update User (no need to call save())
-//         const updatedUser = await User.findByIdAndUpdate(
-//             userId,
-//             { firstName, lastName },
-//             { new: true, runValidators: true }
-//         );
 
-//         // Update Profile
-//         profile.registrationNo = registrationNo;
-//         profile.ExamRollNo = ExamRollNo;
-//         profile.course = course;
-//         profile.session = session;
+        // ensure document exists
+        let details = await PersonalDetails.findOne({ additionalDetails: profileId });
+        if (!details) {
+            details = await PersonalDetails.create({ additionalDetails: profileId });
+        }
 
-//         await profile.save();
+        // update
+        const updated = await PersonalDetails.findOneAndUpdate(
+            { additionalDetails: profileId },
+            { $set: req.body },
+            { new: true }
+        );
 
-//         const updatedUserDetails = await User.findById(userId)
-//             .populate("additionalDetails")
-//             .exec();
+        // update in profile 
 
-//         return res.json({
-//             success: true,
-//             message: "Profile updated successfully",
-//             updatedUserDetails,
-//         });
+        await Profile.findByIdAndUpdate(
+            profileId,
+            {$push:{personalDetails:updated._id}}
+        )
 
-//     } catch (error) {
-//         console.log(error);
-//         return res.status(500).json({
-//             success: false,
-//             message: error.message,
-//         });
-//     }
-// };
+        res.json({ success: true, updated });
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ success: false, error: error.message });
+    }
+};

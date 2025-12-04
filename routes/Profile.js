@@ -3,7 +3,7 @@ const router = express.Router();
 
 const {showUserPost, showResponse} = require("../controllers/L&FProfile");
 const {updateProfilePic, updateProfessionalDetails,
-    qualificationDetails
+    qualificationDetails, updatePersonalDetails
 } = require("../controllers/ClgProfile")
 
 const {auth} = require("../middlewares/auth")
@@ -18,5 +18,7 @@ router.get("/showResponse", auth, showResponse);
 router.post("/updateProfilePic", auth, updateProfilePic)
 router.post("/updateProfessionalDetails", auth, updateProfessionalDetails);
 router.post("/qualificationDetails", auth, qualificationDetails);
+
+router.post("/updatePersonalDetails", auth, updatePersonalDetails)
 
 module.exports = router

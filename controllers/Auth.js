@@ -145,15 +145,8 @@ exports.signup = async (req, res) => {
 
         // Todo: for writing profile section logic
         const profileDetails = await Profile.create({
-            gender:null,
-            course:null,
-            session:null,
-            college:null,
-            registrationNo:null,
-            ExamRollNo:null,
-            qualification:[],
+            personalDetails:[],
             semester:[],
-            socialMediaLinks:[],
             documentData:[],
             Project:[],
         })
