@@ -49,10 +49,20 @@ const profileSchema = new mongoose.Schema({
     //     }
     // ],
 
-    personalDetails:[
+    personalDetails: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "PersonalDetails"
+        }
+    ],
+    Project: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Project"
+    }],
+    skillsandRating:[
         {
             type:mongoose.Schema.Types.ObjectId,
-            ref:"PersonalDetails"
+            ref: "SkillsAndRating"
         }
     ],
     semester: [
@@ -67,10 +77,6 @@ const profileSchema = new mongoose.Schema({
             ref: "Document",
         }
     ],
-    Project: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Project"
-    }]
 })
 
 // export the profile schema 

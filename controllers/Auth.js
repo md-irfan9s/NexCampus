@@ -149,6 +149,7 @@ exports.signup = async (req, res) => {
             semester:[],
             documentData:[],
             Project:[],
+            skillsandRating:[],
         })
 
         // craete lost and found data as a null 

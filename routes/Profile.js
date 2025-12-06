@@ -2,9 +2,9 @@ const express = require("express");
 const router = express.Router();
 
 const {showUserPost, showResponse} = require("../controllers/L&FProfile");
-const {updateProfilePic, updateProfessionalDetails,
-    qualificationDetails, updatePersonalDetails
+const {updateProfilePic, updatePersonalDetails, showPersonalDetails
 } = require("../controllers/ClgProfile")
+const {uploadProject, editProject} = require("../controllers/Project")
 
 const {auth} = require("../middlewares/auth")
 
@@ -16,9 +16,16 @@ router.get("/showResponse", auth, showResponse);
 //--------------------------College Management Profile-------------------------------------
 
 router.post("/updateProfilePic", auth, updateProfilePic)
-router.post("/updateProfessionalDetails", auth, updateProfessionalDetails);
-router.post("/qualificationDetails", auth, qualificationDetails);
+// router.post("/updateProfessionalDetails", auth, updateProfessionalDetails);
+// router.post("/qualificationDetails", auth, qualificationDetails);
 
 router.post("/updatePersonalDetails", auth, updatePersonalDetails)
+router.get("/showPersonalDetails", auth, showPersonalDetails)
+
+// Upload Project Details
+
+router.post("/uploadProject", auth, uploadProject);
+router.post("/editProject/:id", auth, editProject);
+
 
 module.exports = router
