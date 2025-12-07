@@ -129,12 +129,15 @@ exports.showSkillsAndRating = async(req, res) => {
         const profileId = user.additionalDetails;
 
         const getSkillsAndRating = await Profile.findById(profileId)
-                                    .populate("skillsandRating").exec();
+                                    .populate({
+                                        path: "skillsandRating",
+                                        select:"skill rating"
+                                    })
 
         
-        res.json({
+        return res.json({
             success:true,
-            getSkillsAndRating
+            skills: getSkillsAndRating.skillsandRating
         })
 
     }

@@ -5,6 +5,8 @@ const {showUserPost, showResponse} = require("../controllers/L&FProfile");
 const {updateProfilePic, updatePersonalDetails, showPersonalDetails
 } = require("../controllers/ClgProfile")
 const {uploadProject, editProject} = require("../controllers/Project")
+const {createSkillsRating, editSkillsAndRating, showSkillsAndRating} = require("../controllers/SkillsAndRating");
+// const {uploadAdmitCard} = require("../controllers/Semester")
 
 const {auth} = require("../middlewares/auth")
 
@@ -26,6 +28,11 @@ router.get("/showPersonalDetails", auth, showPersonalDetails)
 
 router.post("/uploadProject", auth, uploadProject);
 router.post("/editProject/:id", auth, editProject);
+
+// upload skills and rating
+router.post("/createSkillsRating", auth, createSkillsRating);
+router.post("/editSkillsAndRating/:id", auth, editSkillsAndRating)
+router.get("/showSkillsAndRating", auth, showSkillsAndRating)
 
 
 module.exports = router

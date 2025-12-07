@@ -18,15 +18,36 @@ const personalDetailsSchema = new mongoose.Schema({
         type: String,
     },
     // qualification Details 
-    BoardName: {
+    matriculation: {
         type: String,
     },
-    obtained: {
+    matricPercent: {
         type: String
     },
-    year: {
+    matricYear: {
         type: String,
     },
+    // intermidiate 
+    intermediate: {
+        type: String,
+    },
+    intermediatePercent: {
+        type: String
+    },
+    intermediateYear: {
+        type: String,
+    },
+    // Graduation
+    Graduation:{
+        type:String
+    },
+    cgpa:{
+        type:String
+    },
+    GraduationYear:{
+        type:String
+    },
+
     //social links
     LinkedIn:{
         type:String,
