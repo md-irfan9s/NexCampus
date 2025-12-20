@@ -1,1 +1,71 @@
 /* write your css here */
+.shadow-color {
+    box-shadow:
+        inset 0 2px 12px rgba(217, 217, 217, 0.479),   /* top */
+        inset 0 3px 2px rgba(217, 217, 217, 0.253); /* bottom inset */
+}
+
+.button-shadow:hover{
+    box-shadow:
+    inset 0 -1px 4px rgba(217, 217, 217, 0.251),   
+    inset -1px 0 4px rgba(217, 217, 217, 0.322),  
+    inset 0 0px 0px rgba(217, 217, 217, 0.251),   
+    inset 0px 0px rgba(217, 217, 217, 0.322); 
+}
+
+.shadow-bottom{
+    box-shadow: 
+    0 4px 8px rgba(0, 0, 0, 0.57);
+}
+/* .button-shadow{
+    box-shadow:
+    inset 0 -1px 4px rgba(217, 217, 217, 0.251),   
+    inset -1px 0 4px rgba(217, 217, 217, 0.322),  
+    inset 0 0px 0px rgba(217, 217, 217, 0.251),   
+    inset 0px 0px rgba(217, 217, 217, 0.322);   
+} */
+
+.backroundImg{
+    background-image: url("/src/assets/images//section1.png");
+    background-position: top;
+    
+}
+.shadow-color-section2 {
+    box-shadow:
+        inset 0 2px 12px #0ff394a5,   /* top */
+        inset 0 3px 2px #0ff3948b; /* bottom inset */
+}
+
+
+/* --------------------------------------------------- */
+.creators-swiper .swiper-slide {
+  display: flex;
+  justify-content: center;
+  transition: transform 0.4s ease, opacity 0.4s ease;
+  transform: scale(0.85);
+  opacity: 0.6;
+}
+
+.creators-swiper .swiper-slide-active {
+  transform: scale(1);
+  opacity: 1;
+}
+
+.full-inner-shadow{
+    box-shadow: inset 0 0 20px 5px rgba(255, 255, 255, 0.363); /* inner white shadow */
+}
+.icon-inner-shadow{
+    box-shadow: inset 0 0 10px 2px rgba(255, 255, 255, 0.363); /* inner white shadow */
+}
+.first-swiper .swiper-slide {
+  opacity: 1 !important;
+  filter: brightness(1) !important;
+  transform: scale(1) !important;
+  transition: all 0.4s ease;
+}
+
+.first-swiper .swiper-slide-active {
+  opacity: 1 !important;
+  filter: brightness(1) !important;
+  transform: scale(1) !important;
+}
